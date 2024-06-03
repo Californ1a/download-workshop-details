@@ -1,8 +1,9 @@
 {
-  "extends": "@tsconfig/recommended/tsconfig.json",
-  "include": ["src", "types"],
-  "compilerOptions": {
-    "module": "esnext",
-    "allowImportingTsExtensions": false
-  }
+	"extends": "@tsconfig/recommended/tsconfig.json",
+	"include": ["src", "types"],
+	"compilerOptions": {
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"allowImportingTsExtensions": false
+	}
 }

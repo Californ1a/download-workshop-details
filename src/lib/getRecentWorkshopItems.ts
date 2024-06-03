@@ -5,7 +5,12 @@ import type { WorkshopResponse, Response } from './types/WorkshopResponse';
 
 const _baseUrl = 'https://api.steampowered.com/IPublishedFileService/QueryFiles/v1/';
 
-export type GetRecentWorkshopItems = (key: string, appId: number, cursor?: string, maxRetries?: number) => Promise<WorkshopResponse>;
+export type GetRecentWorkshopItems = (
+	key: string,
+	appId: number,
+	cursor?: string,
+	maxRetries?: number
+) => Promise<WorkshopResponse>;
 
 /**
  * Factory function to create a getRecentWorkshopItems function with injected dependencies.
@@ -14,13 +19,19 @@ export type GetRecentWorkshopItems = (key: string, appId: number, cursor?: strin
  * @param delay - The delay function to use for exponential backoff.
  * @returns The getRecentWorkshopItems function with the injected dependencies.
  */
-export function createGetRecentWorkshopItems(axios: AxiosStatic, baseUrl: string, delay: Delay): GetRecentWorkshopItems  {
+export function createGetRecentWorkshopItems(
+	axios: AxiosStatic,
+	baseUrl: string,
+	delay: Delay
+): GetRecentWorkshopItems {
 	return async function getRecentWorkshopItems(key, appId, cursor = '*', maxRetries = 6) {
 		let retries = 0;
 		while (retries < maxRetries) {
 			try {
 				const urlEncodedCursor = encodeURIComponent(cursor);
-				const response = await axios.get<Response>(`${baseUrl}?key=${key}&query_type=1&cursor=${urlEncodedCursor}&numperpage=100&appid=${appId}&return_details=true`);
+				const response = await axios.get<Response>(
+					`${baseUrl}?key=${key}&query_type=1&cursor=${urlEncodedCursor}&numperpage=100&appid=${appId}&return_details=true`
+				);
 				return response.data.response;
 			} catch (error) {
 				console.error(`Attempt ${retries + 1} failed - Retrying`);
@@ -30,7 +41,7 @@ export function createGetRecentWorkshopItems(axios: AxiosStatic, baseUrl: string
 			}
 		}
 		throw new Error('Max retries exceeded');
-	}
+	};
 }
 
 /**

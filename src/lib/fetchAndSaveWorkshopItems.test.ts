@@ -36,7 +36,7 @@ describe('fetchAndSaveWorkshopItems', () => {
 	it('should throw an error if App ID cannot be parsed as a number', async () => {
 		// @ts-ignore
 		await expect(fetchAndSaveWorkshopItems('key', 'appId')).rejects.toThrow('App ID must be a number');
-	})
+	});
 
 	it('should throw an error if Steam Web API key is not a string', async () => {
 		// @ts-ignore
@@ -50,7 +50,9 @@ describe('fetchAndSaveWorkshopItems', () => {
 
 	it('should throw an error if minified is not a boolean', async () => {
 		// @ts-ignore
-		await expect(fetchAndSaveWorkshopItems('key', 123, 'filename', 'minified')).rejects.toThrow('Minified must be a boolean');
+		await expect(fetchAndSaveWorkshopItems('key', 123, 'filename', 'minified')).rejects.toThrow(
+			'Minified must be a boolean'
+		);
 	});
 
 	it('should fetch all workshop items and save them to a JSON file', async () => {

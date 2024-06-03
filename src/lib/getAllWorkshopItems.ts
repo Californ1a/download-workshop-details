@@ -16,24 +16,29 @@ export function createGetAllWorkshopItems(
 	getRecentWorkshopItems: GetRecentWorkshopItems,
 	logProgress: LogProgress,
 	nf: NF,
-	formatDuration: FormatDuration): GetAllWorkshopItems {
+	formatDuration: FormatDuration
+): GetAllWorkshopItems {
 	return async function getAllWorkshopItems(key, appId) {
 		const start = process.hrtime();
 		const items: PublishedFileDetail[] = [];
 		let cursor = '*';
 		let response = await getRecentWorkshopItems(key, appId, cursor);
 		const total = response.total ?? 0;
-		if (!response.publishedfiledetails || !Array.isArray(response.publishedfiledetails)
+		/* eslint-disable prettier/prettier */
+		if (!response.publishedfiledetails|| !Array.isArray(response.publishedfiledetails)
 			|| typeof response.total !== 'number') {
+		/* eslint-enable prettier/prettier */
 			throw new Error('Invalid response');
 		}
 		items.push(...response.publishedfiledetails);
 		logProgress(items.length, response.total);
+		/* eslint-disable prettier/prettier */
 		while (response.next_cursor
 			&& items.length < total
 			&& typeof response.publishedfiledetails === 'object'
 			&& Array.isArray(response.publishedfiledetails)
 			&& response.publishedfiledetails.length > 0) {
+			/* eslint-enable prettier/prettier */
 			cursor = response.next_cursor;
 			try {
 				response = await getRecentWorkshopItems(key, appId, cursor);
@@ -53,11 +58,13 @@ export function createGetAllWorkshopItems(
 
 		process.stdout.clearLine(0);
 		process.stdout.cursorTo(0);
-		process.stdout.write(`Collected ${nf(items.length)}/${nf(total)} items in ${duration} (${items.length === total ? 'Complete' : 'Incomplete'})`);
+		// eslint-disable-next-line prettier/prettier
+		const completedStr = (items.length === total) ? 'Complete' : 'Incomplete';
+		process.stdout.write(`Collected ${nf(items.length)}/${nf(total)} items in ${duration} (${completedStr})`);
 		process.stdout.write('\n');
 
 		return items;
-	}
+	};
 }
 
 /**

@@ -1,8 +1,13 @@
 import _fs from 'node:fs/promises';
-import _getAllWorkshopItems, { type GetAllWorkshopItems } from "./getAllWorkshopItems";
+import _getAllWorkshopItems, { type GetAllWorkshopItems } from './getAllWorkshopItems';
 import { nf as _nf } from './utils';
 
-export type FetchAndSaveWorkshopItems = (key: string, appId: number, filename?: string, minified?: boolean) => Promise<void>;
+export type FetchAndSaveWorkshopItems = (
+	key: string,
+	appId: number,
+	filename?: string,
+	minified?: boolean
+) => Promise<void>;
 
 /**
  * Creates a function that fetches workshop items using the Steam Web API key and saves them to a JSON file.
@@ -11,7 +16,11 @@ export type FetchAndSaveWorkshopItems = (key: string, appId: number, filename?: 
  * @param nf - The number format function.
  * @returns The fetchAndSaveWorkshopItems function.
  */
-export function createFetchAndSaveWorkshopItems(getAllWorkshopItems: GetAllWorkshopItems, fs: typeof _fs, nf: typeof _nf): FetchAndSaveWorkshopItems {
+export function createFetchAndSaveWorkshopItems(
+	getAllWorkshopItems: GetAllWorkshopItems,
+	fs: typeof _fs,
+	nf: typeof _nf
+): FetchAndSaveWorkshopItems {
 	return async function fetchAndSaveWorkshopItems(key, appId, filename = 'workshopItems', minified = true) {
 		if (!key) throw new Error('No Steam Web API key provided');
 		if (!appId) throw new Error('No App ID provided');
@@ -26,12 +35,10 @@ export function createFetchAndSaveWorkshopItems(getAllWorkshopItems: GetAllWorks
 
 		const items = await getAllWorkshopItems(key, appId);
 		const json = minified ? JSON.stringify(items) : JSON.stringify(items, null, 2);
-		const file = (filename)
-			? (filename.endsWith('.json')) ? filename : `${filename}.json`
-			: 'workshopItems.json';
+		const file = filename ? (filename.endsWith('.json') ? filename : `${filename}.json`) : 'workshopItems.json';
 		await fs.writeFile(file, json, 'utf-8');
 		console.log(`Saved ${nf(items.length)} items to ${file}`);
-	}
+	};
 }
 
 /**

@@ -30,7 +30,10 @@ describe('getRecentWorkshopItems', () => {
 		const result = await getRecentWorkshopItems(key, appId, cursor);
 
 		expect(result).toBe('workshop items');
-		expect(axios.get).toHaveBeenCalledWith(`${baseUrl}?key=${key}&query_type=1&cursor=${encodeURIComponent(cursor)}&numperpage=100&appid=${appId}&return_details=true`);
+		const encodedCursor = encodeURIComponent(cursor);
+		expect(axios.get).toHaveBeenCalledWith(
+			`${baseUrl}?key=${key}&query_type=1&cursor=${encodedCursor}&numperpage=100&appid=${appId}&return_details=true`
+		);
 	});
 
 	it('should retry on error', async () => {
@@ -45,8 +48,15 @@ describe('getRecentWorkshopItems', () => {
 
 		expect(result).toBe('workshop items');
 		expect(axios.get).toHaveBeenCalledTimes(2);
-		expect(axios.get).toHaveBeenNthCalledWith(1, `${baseUrl}?key=${key}&query_type=1&cursor=${encodeURIComponent(cursor)}&numperpage=100&appid=${appId}&return_details=true`);
-		expect(axios.get).toHaveBeenNthCalledWith(2, `${baseUrl}?key=${key}&query_type=1&cursor=${encodeURIComponent(cursor)}&numperpage=100&appid=${appId}&return_details=true`);
+		const encodedCursor = encodeURIComponent(cursor);
+		expect(axios.get).toHaveBeenNthCalledWith(
+			1,
+			`${baseUrl}?key=${key}&query_type=1&cursor=${encodedCursor}&numperpage=100&appid=${appId}&return_details=true`
+		);
+		expect(axios.get).toHaveBeenNthCalledWith(
+			2,
+			`${baseUrl}?key=${key}&query_type=1&cursor=${encodedCursor}&numperpage=100&appid=${appId}&return_details=true`
+		);
 		expect(delay).toHaveBeenCalledTimes(1);
 	});
 

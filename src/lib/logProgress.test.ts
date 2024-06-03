@@ -23,7 +23,7 @@ describe('logProgress', () => {
 		}
 		writeSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
 	});
-	
+
 	afterEach(() => {
 		clearLineSpy.mockRestore();
 		cursorToSpy.mockRestore();
@@ -32,7 +32,7 @@ describe('logProgress', () => {
 
 	it('the factory should return a function', () => {
 		const logProgress = createLogProgress(mocknf);
-		
+
 		expect(typeof logProgress).toBe('function');
 	});
 

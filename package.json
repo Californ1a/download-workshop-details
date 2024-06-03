@@ -26,10 +26,13 @@
 		}
 	},
 	"prettier": {
-		"printWidth": 80,
+		"printWidth": 120,
 		"semi": true,
 		"singleQuote": true,
-		"trailingComma": "es5"
+		"trailingComma": "es5",
+		"useTabs": true,
+		"tabWidth": 2,
+		"endOfLine": "crlf"
 	},
 	"jest": {
 		"testEnvironment": "node"
@@ -49,6 +52,7 @@
 	"devDependencies": {
 		"@size-limit/preset-small-lib": "^11.1.4",
 		"@tsconfig/recommended": "^1.0.6",
+		"@types/eslint": "^8.56.10",
 		"dts-cli": "^2.0.5",
 		"husky": "^9.0.11",
 		"size-limit": "^11.1.4",

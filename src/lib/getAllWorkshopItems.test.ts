@@ -7,8 +7,7 @@ let clearLineSpy: jest.SpyInstance;
 let cursorToSpy: jest.SpyInstance;
 let writeSpy: jest.SpyInstance;
 
-describe("getAllWorkshopItems", () => {
-
+describe('getAllWorkshopItems', () => {
 	beforeEach(() => {
 		errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 		logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
@@ -38,74 +37,52 @@ describe("getAllWorkshopItems", () => {
 		writeSpy.mockRestore();
 	});
 
-	it("should return a function", () => {
-		const getAllWorkshopItems = createGetAllWorkshopItems(
-			jest.fn(),
-			jest.fn(),
-			jest.fn(),
-			jest.fn()
-		);
-		expect(typeof getAllWorkshopItems).toBe("function");
+	it('should return a function', () => {
+		const getAllWorkshopItems = createGetAllWorkshopItems(jest.fn(), jest.fn(), jest.fn(), jest.fn());
+		expect(typeof getAllWorkshopItems).toBe('function');
 	});
 
-	it("should throw an error if the total is not a number", async () => {
+	it('should throw an error if the total is not a number', async () => {
 		const getRecentWorkshopItems = jest.fn().mockResolvedValue({
-			total: "1",
-			publishedfiledetails: [{ title: "Test" }],
+			total: '1',
+			publishedfiledetails: [{ title: 'Test' }],
 		});
-		const getAllWorkshopItems = createGetAllWorkshopItems(
-			getRecentWorkshopItems,
-			jest.fn(),
-			jest.fn(),
-			jest.fn()
-		);
-		await expect(getAllWorkshopItems("key", 1)).rejects.toThrow("Invalid response");
+		const getAllWorkshopItems = createGetAllWorkshopItems(getRecentWorkshopItems, jest.fn(), jest.fn(), jest.fn());
+		await expect(getAllWorkshopItems('key', 1)).rejects.toThrow('Invalid response');
 	});
 
-	it("should thow an error if total is different on a future call", async () => {
-		const getRecentWorkshopItems = jest.fn().mockResolvedValueOnce({
-			total: 2,
-			publishedfiledetails: [{ title: "Test" }],
-			next_cursor: "cursor",
-		}).mockResolvedValueOnce({
-			total: 3,
-			publishedfiledetails: [],
-		});
-		const getAllWorkshopItems = createGetAllWorkshopItems(
-			getRecentWorkshopItems,
-			jest.fn(),
-			jest.fn(),
-			jest.fn()
-		);
-		await expect(getAllWorkshopItems("key", 1)).rejects.toThrow("Total count mismatch");
-	})
+	it('should thow an error if total is different on a future call', async () => {
+		const getRecentWorkshopItems = jest
+			.fn()
+			.mockResolvedValueOnce({
+				total: 2,
+				publishedfiledetails: [{ title: 'Test' }],
+				next_cursor: 'cursor',
+			})
+			.mockResolvedValueOnce({
+				total: 3,
+				publishedfiledetails: [],
+			});
+		const getAllWorkshopItems = createGetAllWorkshopItems(getRecentWorkshopItems, jest.fn(), jest.fn(), jest.fn());
+		await expect(getAllWorkshopItems('key', 1)).rejects.toThrow('Total count mismatch');
+	});
 
-	it("should throw an error if the publishedfiledetails is not an array", async () => {
+	it('should throw an error if the publishedfiledetails is not an array', async () => {
 		const getRecentWorkshopItems = jest.fn().mockResolvedValue({
 			total: 1,
-			publishedfiledetails: { title: "Test" },
+			publishedfiledetails: { title: 'Test' },
 		});
-		const getAllWorkshopItems = createGetAllWorkshopItems(
-			getRecentWorkshopItems,
-			jest.fn(),
-			jest.fn(),
-			jest.fn()
-		);
-		await expect(getAllWorkshopItems("key", 1)).rejects.toThrow("Invalid response");
+		const getAllWorkshopItems = createGetAllWorkshopItems(getRecentWorkshopItems, jest.fn(), jest.fn(), jest.fn());
+		await expect(getAllWorkshopItems('key', 1)).rejects.toThrow('Invalid response');
 	});
 
-	it("should call getRecentWorkshopItems", async () => {
+	it('should call getRecentWorkshopItems', async () => {
 		const getRecentWorkshopItems = jest.fn().mockResolvedValue({
 			total: 1,
-			publishedfiledetails: [{ title: "Test" }],
+			publishedfiledetails: [{ title: 'Test' }],
 		});
-		const getAllWorkshopItems = createGetAllWorkshopItems(
-			getRecentWorkshopItems,
-			jest.fn(),
-			jest.fn(),
-			jest.fn()
-		);
-		await getAllWorkshopItems("key", 1);
+		const getAllWorkshopItems = createGetAllWorkshopItems(getRecentWorkshopItems, jest.fn(), jest.fn(), jest.fn());
+		await getAllWorkshopItems('key', 1);
 		expect(getRecentWorkshopItems).toHaveBeenCalled();
 	});
 
@@ -119,9 +96,9 @@ describe("getAllWorkshopItems", () => {
 		const key = 'valid-api-key';
 		const appId = 123;
 		const mockResponse = {
-				total: 2,
-				publishedfiledetails: [{ id: 1 }, { id: 2 }],
-				next_cursor: null
+			total: 2,
+			publishedfiledetails: [{ id: 1 }, { id: 2 }],
+			next_cursor: null,
 		};
 
 		getRecentWorkshopItems.mockResolvedValueOnce(mockResponse);
@@ -145,9 +122,9 @@ describe("getAllWorkshopItems", () => {
 		const key = 'valid-api-key';
 		const appId = 123;
 		const mockResponse = {
-				total: 0,
-				publishedfiledetails: [],
-				next_cursor: null
+			total: 0,
+			publishedfiledetails: [],
+			next_cursor: null,
 		};
 
 		getRecentWorkshopItems.mockResolvedValueOnce(mockResponse);
@@ -171,14 +148,14 @@ describe("getAllWorkshopItems", () => {
 		const key = 'valid-api-key';
 		const appId = 123;
 		const mockResponse1 = {
-				total: 3,
-				publishedfiledetails: [{ id: 1 }, { id: 2 }],
-				next_cursor: 'page2'
+			total: 3,
+			publishedfiledetails: [{ id: 1 }, { id: 2 }],
+			next_cursor: 'page2',
 		};
 		const mockResponse2 = {
-				total: 3,
-				publishedfiledetails: [{ id: 3 }],
-				next_cursor: null
+			total: 3,
+			publishedfiledetails: [{ id: 3 }],
+			next_cursor: null,
 		};
 
 		getRecentWorkshopItems.mockResolvedValueOnce(mockResponse1);

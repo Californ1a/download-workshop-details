@@ -12,8 +12,8 @@ export function createLogProgress(nf: typeof _nf): LogProgress {
 	return function logProgress(current, total) {
 		process.stdout.clearLine(0);
 		process.stdout.cursorTo(0);
-		process.stdout.write(`Progress (${(Math.round((current / total) * 100))}%): ${nf(current)}/${nf(total)}`);
-	}
+		process.stdout.write(`Progress (${Math.round((current / total) * 100)}%): ${nf(current)}/${nf(total)}`);
+	};
 }
 
 /**
